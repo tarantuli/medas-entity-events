@@ -6,8 +6,10 @@ namespace Medas\EntityEvents;
 
 use Medas\EntityEvents\Attributes\DispatchEvent;
 use Medas\EntityManager\EntityClasses;
+use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Cache\CacheManager;
 
+#[Service]
 class EntityEventsManager
 {
     private const CACHE_KEY = 'Medas\EntityEvents\EntityEventsManager::get';
