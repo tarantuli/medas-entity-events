@@ -25,9 +25,9 @@ class AfterChangeHandler implements AfterFlushHandler
     {
         $this->eventTypes = $this->entityEventsManager->get();
 
-        $this->handleAttribute($changes->creates(), DispatchAfterCreation::class);
-        $this->handleAttribute($changes->updates(), DispatchAfterModification::class);
-        $this->handleAttribute($changes->deletes(), DispatchAfterDeletion::class);
+        $this->handleAttribute($changes->createdEntities(), DispatchAfterCreation::class);
+        $this->handleAttribute($changes->updatedEntities(), DispatchAfterModification::class);
+        $this->handleAttribute($changes->deletedEntities(), DispatchAfterDeletion::class);
     }
 
     private function handleAttribute(array $entities, string $attribute): void

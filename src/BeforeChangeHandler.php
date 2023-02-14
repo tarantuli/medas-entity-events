@@ -25,9 +25,9 @@ class BeforeChangeHandler implements BeforeFlushHandler
     {
         $this->eventTypes = $this->entityEventsManager->get();
 
-        $this->handleAttribute($changes->creates(), DispatchBeforeCreation::class);
-        $this->handleAttribute($changes->updates(), DispatchBeforeModification::class);
-        $this->handleAttribute($changes->deletes(), DispatchBeforeDeletion::class);
+        $this->handleAttribute($changes->createdEntities(), DispatchBeforeCreation::class);
+        $this->handleAttribute($changes->updatedEntities(), DispatchBeforeModification::class);
+        $this->handleAttribute($changes->deletedEntities(), DispatchBeforeDeletion::class);
     }
 
     private function handleAttribute(array $entities, string $attribute): void
