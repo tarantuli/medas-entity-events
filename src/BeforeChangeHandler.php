@@ -13,6 +13,7 @@ use Medas\ServiceManager\Attributes\Service;
 class BeforeChangeHandler implements BeforeFlushHandler
 {
     private EntityEvents $eventTypes;
+    private bool $dispatchedEvents = false;
 
     public function __construct(
         private readonly EntityEventsManager $entityEventsManager,
@@ -21,13 +22,15 @@ class BeforeChangeHandler implements BeforeFlushHandler
     {
     }
 
-    public function handle(Changes $changes): void
+    public function handle(Changes $changes): bool
     {
         $this->eventTypes = $this->entityEventsManager->get();
 
         $this->handleAttribute($changes->createdEntities(), DispatchBeforeCreation::class);
         $this->handleAttribute($changes->updatedEntities(), DispatchBeforeModification::class);
         $this->handleAttribute($changes->deletedEntities(), DispatchBeforeDeletion::class);
+
+        return $this->dispatchedEvents;
     }
 
     private function handleAttribute(array $entities, string $attribute): void
@@ -37,6 +40,7 @@ class BeforeChangeHandler implements BeforeFlushHandler
 
             if ($eventClass) {
                 $this->dispatcher->dispatch(new $eventClass($entity));
+                $this->dispatchedEvents = true;
             }
         }
     }
