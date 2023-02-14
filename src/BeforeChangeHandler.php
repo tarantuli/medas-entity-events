@@ -15,7 +15,7 @@ class BeforeChangeHandler implements BeforeFlushHandler
     private EntityEvents $eventTypes;
 
     public function __construct(
-        private readonly EntityEventsManager $eventTypeHandler,
+        private readonly EntityEventsManager $entityEventsManager,
         private readonly EventDispatcher     $dispatcher,
     )
     {
@@ -23,7 +23,7 @@ class BeforeChangeHandler implements BeforeFlushHandler
 
     public function handle(Changes $changes): void
     {
-        $this->eventTypes = $this->eventTypeHandler->get();
+        $this->eventTypes = $this->entityEventsManager->get();
 
         $this->handleAttribute($changes->creates(), DispatchBeforeCreation::class);
         $this->handleAttribute($changes->updates(), DispatchBeforeModification::class);
