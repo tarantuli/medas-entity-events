@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\EntityEvents;
 
-use Medas\EntityEvents\Attributes\DispatchOnCreation;
-use Medas\EntityEvents\Attributes\DispatchOnDeletion;
-use Medas\EntityEvents\Attributes\DispatchOnModification;
-use Medas\EntityManager\Entities\AfterFlushHandler;
-use Medas\EntityManager\Entities\Changes;
+use Medas\EntityEvents\Attributes\{DispatchBeforeCreation, DispatchBeforeDeletion, DispatchBeforeModification};
+use Medas\EntityManager\Entities\{BeforeFlushHandler, Changes};
 use Medas\Events\EventDispatcher;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class ChangeHandler implements AfterFlushHandler
+class BeforeChangeHandler implements BeforeFlushHandler
 {
     private EntityEvents $eventTypes;
 
@@ -28,9 +25,9 @@ class ChangeHandler implements AfterFlushHandler
     {
         $this->eventTypes = $this->eventTypeHandler->get();
 
-        $this->handleAttribute($changes->creates(), DispatchOnCreation::class);
-        $this->handleAttribute($changes->updates(), DispatchOnModification::class);
-        $this->handleAttribute($changes->deletes(), DispatchOnDeletion::class);
+        $this->handleAttribute($changes->creates(), DispatchBeforeCreation::class);
+        $this->handleAttribute($changes->updates(), DispatchBeforeModification::class);
+        $this->handleAttribute($changes->deletes(), DispatchBeforeDeletion::class);
     }
 
     private function handleAttribute(array $entities, string $attribute): void

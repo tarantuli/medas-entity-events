@@ -4,14 +4,24 @@ declare(strict_types=1);
 
 namespace Medas\EntityEvents;
 
-use Medas\EntityEvents\Attributes\{DispatchOnCreation, DispatchOnDeletion, DispatchOnModification};
+use Medas\EntityEvents\Attributes\{DispatchAfterCreation,
+    DispatchAfterDeletion,
+    DispatchAfterModification,
+    DispatchBeforeCreation,
+    DispatchBeforeDeletion,
+    DispatchBeforeModification
+};
 
 class EntityEvents
 {
     private array $data = [
-        DispatchOnCreation::class => [],
-        DispatchOnDeletion::class => [],
-        DispatchOnModification::class => [],
+        DispatchBeforeCreation::class => [],
+        DispatchBeforeDeletion::class => [],
+        DispatchBeforeModification::class => [],
+
+        DispatchAfterCreation::class => [],
+        DispatchAfterDeletion::class => [],
+        DispatchAfterModification::class => [],
     ];
 
     public function add(string $entityName, string $attribute, string $eventClass): void
