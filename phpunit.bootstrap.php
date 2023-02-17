@@ -3,9 +3,16 @@
 declare(strict_types=1);
 
 use Medas\EntityEvents\EntityEventsPackage;
-use Medas\ServiceManager\ServiceManager;
+use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 
 chdir(__DIR__);
 
-ServiceManager::get()
-    ->addPackage(EntityEventsPackage::instance());
+new ServiceManager(function (): ServiceConfig {
+    $config = new ServiceConfig();
+
+    $config->addPackages([
+        EntityEventsPackage::instance(),
+    ]);
+
+    return $config;
+});
