@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityEvents;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityEvents\Attributes\DispatchEvent;
 use Medas\EntityManager\EntityClasses;
-use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Cache\CacheManager;
 
 #[Service]

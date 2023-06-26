@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityEvents;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityEvents\Attributes\{DispatchBeforeCreation, DispatchBeforeDeletion, DispatchBeforeModification};
 use Medas\EntityManager\Entities\{BeforeFlushHandler, Changes};
 use Medas\Events\EventDispatcher;
-use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class BeforeChangeHandler implements BeforeFlushHandler
