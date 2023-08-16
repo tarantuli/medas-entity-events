@@ -15,10 +15,10 @@ class EntityEventsPackage extends BasePackage
 
     public function dependencies(): array
     {
-        return $this->dependenciesByClass([
-            EntityManagerPackage::class,
-            EventsPackage::class,
-        ]);
+        return [
+            EntityManagerPackage::instance(),
+            EventsPackage::instance(),
+        ];
     }
 
     public function sourceDirectory(): string
