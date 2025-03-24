@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityEvents;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityEvents\Attributes\{DispatchAfterCreation, DispatchAfterDeletion, DispatchAfterModification};
 use Medas\EntityManager\Entities\{AfterFlushHandler, Changes};
 use Medas\Events\EventDispatcher;
 
@@ -21,22 +20,44 @@ class AfterChangeHandler implements AfterFlushHandler
     {
     }
 
-    public function handle(Changes $changes): void
+    public function handle(Changes $changes): bool
     {
-        $this->eventTypes = $this->entityEventsManager->get();
+        if (!isset($this->eventTypes)) {
+            $this->eventTypes = $this->entityEventsManager->get();
+        }
 
-        $this->handleAttribute($changes->createdEntities(), DispatchAfterCreation::class);
-        $this->handleAttribute($changes->updatedEntities(), DispatchAfterModification::class);
-        $this->handleAttribute($changes->deletedEntities(), DispatchAfterDeletion::class);
+        $job = new Job();
+
+        $this->handleAttribute(
+            $job,
+            $changes->createdEntities(),
+            Attributes\DispatchAfterCreation::class
+        );
+
+        $this->handleAttribute(
+            $job,
+            $changes->updatedEntities(),
+            Attributes\DispatchAfterModification::class
+        );
+
+        $this->handleAttribute(
+            $job,
+            $changes->deletedEntities(),
+            Attributes\DispatchAfterDeletion::class
+        );
+
+        return $job->dispatchedEvents;
     }
 
-    private function handleAttribute(array $entities, string $attribute): void
+    private function handleAttribute(Job $job, array $entities, string $attribute): void
     {
         foreach ($entities as $entity) {
             $eventClass = $this->eventTypes->get($entity::class, $attribute);
 
             if ($eventClass) {
                 $this->dispatcher->dispatch(new $eventClass($entity));
+
+                $job->dispatchedEvents = true;
             }
         }
     }

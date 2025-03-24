@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityEvents;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityEvents\Attributes\DispatchEvent;
 use Medas\EntityManager\EntityClasses;
 use Medas\ServiceManager\Cache\CacheManager;
 
@@ -23,10 +22,7 @@ class EntityEventsManager
 
     public function get(): EntityEvents
     {
-        return $this->cacheManager->get()->get(
-            self::CACHE_KEY,
-            fn() => $this->findAll()
-        );
+        return $this->cacheManager->get()->get(self::CACHE_KEY, fn() => $this->findAll());
     }
 
     private function findAll(): EntityEvents
@@ -36,7 +32,7 @@ class EntityEventsManager
 
         foreach ($this->entityClasses->get() as $entityClass) {
             foreach ($attributeClasses as $attributeClass) {
-                /** @var DispatchEvent $dispatchEvent */
+                /** @var Attributes\DispatchEvent $dispatchEvent */
                 $dispatchEvent = attribute($attributeClass, new \ReflectionClass($entityClass));
 
                 if ($dispatchEvent) {
