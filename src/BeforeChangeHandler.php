@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityEvents;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{BeforeFlushHandler, Changes};
+use Medas\EntityManager\{Entities\BeforeFlushHandler, Snapshots\Changes};
 use Medas\Events\EventDispatcher;
 
 #[Service]
