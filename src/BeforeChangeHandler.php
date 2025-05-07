@@ -20,6 +20,11 @@ class BeforeChangeHandler implements BeforeFlushHandler
     {
     }
 
+    public function __serialize(): array
+    {
+        return [];
+    }
+
     public function handle(Changes $changes): bool
     {
         if (!isset($this->eventTypes)) {
