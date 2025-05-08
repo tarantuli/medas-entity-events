@@ -25,6 +25,12 @@ class AfterChangeHandler implements AfterFlushHandler
         return [];
     }
 
+    public function __unserialize(array $data): void
+    {
+        $this->entityEventsManager = \service(EntityEventsManager::class);
+        $this->dispatcher = \service(EventDispatcher::class);
+    }
+
     public function handle(Changes $changes): bool
     {
         if (!isset($this->eventTypes)) {
