@@ -6,7 +6,6 @@ namespace Medas\EntityEvents;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\{Entities\AfterFlushHandler, Snapshots\Changes};
-use Medas\Events\EventDispatcher;
 
 #[Service]
 class AfterChangeHandler implements AfterFlushHandler
@@ -15,7 +14,6 @@ class AfterChangeHandler implements AfterFlushHandler
 
     public function __construct(
         private readonly EntityEventsManager $entityEventsManager,
-        private readonly EventDispatcher     $dispatcher,
     )
     {
     }
@@ -28,7 +26,6 @@ class AfterChangeHandler implements AfterFlushHandler
     public function __unserialize(array $data): void
     {
         $this->entityEventsManager = \service(EntityEventsManager::class);
-        $this->dispatcher = \service(EventDispatcher::class);
     }
 
     public function handle(Changes $changes): bool
@@ -66,7 +63,7 @@ class AfterChangeHandler implements AfterFlushHandler
             $eventClass = $this->eventTypes->get($entity::class, $attribute);
 
             if ($eventClass) {
-                $this->dispatcher->dispatch(new $eventClass($entity));
+                dispatch(new $eventClass($entity));
 
                 $job->dispatchedEvents = true;
             }
