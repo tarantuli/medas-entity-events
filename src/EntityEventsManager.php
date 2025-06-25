@@ -6,23 +6,21 @@ namespace Medas\EntityEvents;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\EntityClasses;
-use Medas\ServiceManager\Cache\CacheManager;
 
 #[Service]
-class EntityEventsManager
+readonly class EntityEventsManager
 {
     private const CACHE_KEY = 'Medas\EntityEvents\EntityEventsManager::get';
 
     public function __construct(
-        private readonly CacheManager  $cacheManager,
-        private readonly EntityClasses $entityClasses,
+        private EntityClasses $entityClasses,
     )
     {
     }
 
     public function get(): EntityEvents
     {
-        return $this->cacheManager->get()->get(self::CACHE_KEY, fn() => $this->findAll());
+        return cache(self::CACHE_KEY, fn() => $this->findAll());
     }
 
     private function findAll(): EntityEvents
