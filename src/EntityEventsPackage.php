@@ -6,7 +6,6 @@ namespace Medas\EntityEvents;
 
 use Medas\Core\AsSingleton;
 use Medas\EntityManager\EntityManagerPackage;
-use Medas\Events\EventsPackage;
 use Medas\ServiceManager\BasePackage;
 
 class EntityEventsPackage extends BasePackage
@@ -17,7 +16,6 @@ class EntityEventsPackage extends BasePackage
     {
         return [
             EntityManagerPackage::instance(),
-            EventsPackage::instance(),
         ];
     }
 
