@@ -10,7 +10,7 @@ use Medas\EntityManager\EntityClasses;
 #[Service]
 readonly class EntityEventsManager
 {
-    private const CACHE_KEY = 'Medas\EntityEvents\EntityEventsManager::get';
+    private const string CACHE_KEY = 'Medas\EntityEvents\EntityEventsManager::get';
 
     public function __construct(
         private EntityClasses $entityClasses,

@@ -17,6 +17,10 @@ class EntityEvents
 
     public function add(string $entityName, string $attribute, string $eventClass): void
     {
+        if (!array_key_exists($attribute, $this->data)) {
+            throw new Exceptions\UnknownDispatchAttribute($attribute);
+        }
+
         $this->data[$attribute][$entityName] = $eventClass;
     }
 

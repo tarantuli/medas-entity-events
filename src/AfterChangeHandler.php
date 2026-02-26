@@ -8,65 +8,15 @@ use Medas\Core\Attributes\Service;
 use Medas\EntityManager\{Entities\AfterFlushHandler, Snapshots\Changes};
 
 #[Service]
-class AfterChangeHandler implements AfterFlushHandler
+class AfterChangeHandler extends AbstractChangeHandler implements AfterFlushHandler
 {
-    private EntityEvents $eventTypes;
-
-    public function __construct(
-        private readonly EntityEventsManager $entityEventsManager,
-    )
-    {
-    }
-
-    public function __serialize(): array
-    {
-        return [];
-    }
-
-    public function __unserialize(array $data): void
-    {
-        $this->entityEventsManager = \service(EntityEventsManager::class);
-    }
-
     public function handle(Changes $changes): bool
     {
-        if (!isset($this->eventTypes)) {
-            $this->eventTypes = $this->entityEventsManager->get();
-        }
-
-        $job = new Job();
-
-        $this->handleAttribute(
-            $job,
-            $changes->createdEntities(),
-            Attributes\DispatchAfterCreation::class
+        return $this->handleChanges(
+            $changes,
+            Attributes\DispatchAfterCreation::class,
+            Attributes\DispatchAfterModification::class,
+            Attributes\DispatchAfterDeletion::class,
         );
-
-        $this->handleAttribute(
-            $job,
-            $changes->updatedEntities(),
-            Attributes\DispatchAfterModification::class
-        );
-
-        $this->handleAttribute(
-            $job,
-            $changes->deletedEntities(),
-            Attributes\DispatchAfterDeletion::class
-        );
-
-        return $job->dispatchedEvents;
-    }
-
-    private function handleAttribute(Job $job, array $entities, string $attribute): void
-    {
-        foreach ($entities as $entity) {
-            $eventClass = $this->eventTypes->get($entity::class, $attribute);
-
-            if ($eventClass) {
-                dispatch(new $eventClass($entity));
-
-                $job->dispatchedEvents = true;
-            }
-        }
     }
 }
