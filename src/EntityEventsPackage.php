@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityEvents;
 
-use Medas\Core\AsSingleton;
+use Medas\Core\{AsSingleton, BasePackage};
 use Medas\EntityManager\EntityManagerPackage;
-use Medas\ServiceManager\BasePackage;
 
 class EntityEventsPackage extends BasePackage
 {
